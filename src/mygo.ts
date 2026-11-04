@@ -4,27 +4,44 @@ import { call, event } from "mygo-runtime";
 
 // ---- Types ----
 
-/** SystemInfo describes the machine the app runs on. */
-export interface SystemInfo {
-  os: string;
-  arch: string;
-  goVersion: string;
+/** Call is one drawn number. */
+export interface Call {
+  number: number;
+  phrase: string;
+}
+
+/** State is the full caller state broadcast to frontends. */
+export interface State {
+  current: Call | null;
+  called: number[];
+  remaining: number;
+  auto: boolean;
+  intervalMs: number;
 }
 
 // ---- Services ----
 
-/**
- * Greeter is callable from the frontend: `mygo generate` turns its methods
- * into typed TypeScript functions in src/mygo.ts.
- */
-export const Greeter = {
-  /** Greet returns a greeting for name. */
-  greet(name: string): Promise<string> {
-    return call("Greeter.Greet", name);
+/** Caller holds game state. */
+export const Caller = {
+  /** AudioPath returns the relative path to the audio file for a number. */
+  audioPath(n: number): Promise<string> {
+    return call("Caller.AudioPath", n);
   },
-  /** Info returns information about the system. */
-  info(): Promise<SystemInfo> {
-    return call("Greeter.Info");
+  /** CallNext draws the next number. */
+  callNext(): Promise<Call> {
+    return call("Caller.CallNext");
+  },
+  /** Reset starts a new game. */
+  reset(): Promise<void> {
+    return call("Caller.Reset");
+  },
+  /** SetAuto enables/disables auto-call. */
+  setAuto(enabled: boolean, intervalMs: number): Promise<void> {
+    return call("Caller.SetAuto", enabled, intervalMs);
+  },
+  /** State returns a snapshot. */
+  state(): Promise<State> {
+    return call("Caller.State");
   },
 } as const;
 
@@ -32,6 +49,6 @@ export const Greeter = {
 
 /** Events sent by the Go side. Subscribe with `events.name.on(listener)`. */
 export const events = {
-  /** Tick is sent to the page every second. */
-  tick: event<string>("tick"),
+  /** Changed is broadcast whenever the caller state changes. */
+  callerChanged: event<State>("caller:changed"),
 } as const;

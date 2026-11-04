@@ -2,65 +2,43 @@ package main
 
 import (
 	"log"
-	"runtime"
-	"time"
 
 	"github.com/egoist/mygo"
 )
 
-// Greeter is callable from the frontend: `mygo generate` turns its methods
-// into typed TypeScript functions in src/mygo.ts.
-type Greeter struct{}
-
-// Greet returns a greeting for name.
-func (Greeter) Greet(name string) string {
-	if name == "" {
-		name = "stranger"
-	}
-	return "Hello, " + name + "! This message comes from Go."
-}
-
-// SystemInfo describes the machine the app runs on.
-type SystemInfo struct {
-	OS        string `json:"os"`
-	Arch      string `json:"arch"`
-	GoVersion string `json:"goVersion"`
-}
-
-// Info returns information about the system.
-func (Greeter) Info() SystemInfo {
-	return SystemInfo{OS: runtime.GOOS, Arch: runtime.GOARCH, GoVersion: runtime.Version()}
-}
-
-// Tick is sent to the page every second.
-var Tick = mygo.NewEvent[time.Time]("tick")
-
 func main() {
-	mygo.Bind(Greeter{})
+	app := mygo.App
+	app.SetName("Bingo Caller")
 
-	mygo.App.WhenReady(func() {
-		win := mygo.NewWindow(mygo.WindowOptions{
+	caller := NewCaller()
+	mygo.Bind(caller)
+
+	app.WhenReady(func() {
+		app.SetMenu(mygo.NewMenu([]*mygo.MenuItem{
+			{Role: mygo.RoleAppMenu},
+			{Label: "Game", Submenu: []*mygo.MenuItem{
+				{Label: "Reset", Accelerator: "CmdOrCtrl+R", Click: func(*mygo.MenuItem, *mygo.Window) {
+					go caller.Reset()
+				}},
+				mygo.Separator(),
+				{Role: mygo.RoleClose},
+			}},
+			{Role: mygo.RoleEditMenu},
+			{Role: mygo.RoleViewMenu},
+			{Role: mygo.RoleWindowMenu},
+		}))
+		mygo.NewWindow(mygo.WindowOptions{
 			Title:           "Bingo Caller",
-			Width:           960,
-			Height:          640,
-			MinWidth:        480,
-			MinHeight:       360,
-			BackgroundColor: "light-dark(#f6f7f9, #0f1115)", // the page's --bg in src/style.css
-			// Opens where the user left it last time.
-			StateKey: "main",
-			// The frontend: devUrl during `mygo dev`, frontendDist
-			// embedded by `mygo build` otherwise (see mygo.json).
-			URL: "/",
+			Width:           980,
+			Height:          720,
+			MinWidth:        720,
+			MinHeight:       560,
+			BackgroundColor: "light-dark(#f5f5f7, #1c1c1e)",
+			StateKey:        "main",
+			URL:             "/",
 		})
-		go func() {
-			for t := range time.Tick(time.Second) {
-				if Tick.Emit(win, t) != nil {
-					return // the window was closed
-				}
-			}
-		}()
 	})
-	if err := mygo.App.Run(); err != nil {
+	if err := app.Run(); err != nil {
 		log.Fatal(err)
 	}
 }

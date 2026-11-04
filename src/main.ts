@@ -1,16 +1,82 @@
-// Greeter and events are generated from the Go code by `mygo generate`.
-import { Greeter, events } from "./mygo";
+import { Caller, events } from "./mygo";
+import "./style.css";
 
-const $ = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
+const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
 
-$("#greet").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  $("#greeting").textContent = await Greeter.greet($<HTMLInputElement>("#name").value);
+const numberEl = $("#number") as HTMLDivElement;
+const phraseEl = $("#phrase") as HTMLDivElement;
+const remainingEl = $("#remaining") as HTMLSpanElement;
+const gridEl = $("#grid") as HTMLDivElement;
+const callBtn = $("#callBtn") as HTMLButtonElement;
+const autoToggle = $("#autoToggle") as HTMLInputElement;
+const intervalInput = $("#interval") as HTMLInputElement;
+const resetBtn = $("#resetBtn") as HTMLButtonElement;
+
+// Build grid 1..90
+const cells: HTMLDivElement[] = [];
+for (let n = 1; n <= 90; n++) {
+  const c = document.createElement("div");
+  c.className = "cell";
+  c.textContent = String(n);
+  c.dataset.n = String(n);
+  cells.push(c);
+  gridEl.appendChild(c);
+}
+
+let currentNumber: number | null = null;
+
+function render(state: any) {
+  if (state.current) {
+    numberEl.textContent = String(state.current.number);
+    phraseEl.textContent = state.current.phrase;
+    currentNumber = state.current.number;
+    // play audio
+    const audio = new Audio(`/audio/${state.current.number}.wav`);
+    audio.play().catch(() => {});
+  } else {
+    numberEl.textContent = "--";
+    phraseEl.textContent = "Press \"Call next\" to start";
+    currentNumber = null;
+  }
+  remainingEl.textContent = `${state.remaining} remaining`;
+  // grid
+  const called = new Set<number>(state.called);
+  cells.forEach((c, i) => {
+    const n = i + 1;
+    c.classList.toggle("called", called.has(n));
+    c.classList.toggle("current", n === currentNumber);
+  });
+  autoToggle.checked = state.auto;
+  if (state.intervalMs) intervalInput.value = String(Math.round(state.intervalMs / 1000));
+  callBtn.disabled = state.remaining === 0;
+}
+
+callBtn.addEventListener("click", async () => {
+  try { await Caller.callNext(); } catch (e) { console.error(e); }
+});
+resetBtn.addEventListener("click", async () => {
+  await Caller.reset();
+});
+autoToggle.addEventListener("change", async () => {
+  const enabled = autoToggle.checked;
+  const sec = Math.max(1, parseInt(intervalInput.value || "5", 10));
+  await Caller.setAuto(enabled, sec * 1000);
+});
+intervalInput.addEventListener("change", async () => {
+  if (autoToggle.checked) {
+    const sec = Math.max(1, parseInt(intervalInput.value || "5", 10));
+    await Caller.setAuto(true, sec * 1000);
+  }
 });
 
-const info = await Greeter.info();
-$("#info").textContent = `${info.os}/${info.arch} · ${info.goVersion}`;
-
-events.tick.on((time) => {
-  $("#clock").textContent = new Date(time).toLocaleTimeString();
+window.addEventListener("keydown", (e) => {
+  if (e.code === "Space" && !(e.target instanceof HTMLInputElement)) {
+    e.preventDefault();
+    callBtn.click();
+  }
 });
+
+events.callerChanged.on((state) => render(state));
+
+// initial
+Caller.state().then(render).catch(console.error);

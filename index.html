@@ -8,14 +8,30 @@
   </head>
   <body>
     <main>
-      <h1>bingo-init</h1>
-      <p class="muted">Go ↔ TypeScript, fully typed.</p>
-      <form id="greet">
-        <input id="name" placeholder="Your name" autocomplete="off" autofocus />
-        <button type="submit">Greet</button>
-      </form>
-      <p id="greeting" class="card"></p>
-      <p class="muted"><span id="info"></span> · <span id="clock">--:--:--</span></p>
+      <header>
+        <h1>Bingo Caller</h1>
+        <span id="remaining" class="muted"></span>
+      </header>
+
+      <section id="current">
+        <div id="number">--</div>
+        <div id="phrase" class="muted">Press "Call next" to start</div>
+      </section>
+
+      <section id="controls">
+        <button id="callBtn">Call next (Space)</button>
+        <label class="auto">
+          <input type="checkbox" id="autoToggle" /> Auto
+        </label>
+        <label class="interval">
+          every
+          <input type="number" id="interval" min="1" max="60" value="5" />
+          s
+        </label>
+        <button id="resetBtn">Reset</button>
+      </section>
+
+      <section id="grid" aria-label="Called numbers"></section>
     </main>
     <script type="module" src="./src/main.ts"></script>
   </body>
