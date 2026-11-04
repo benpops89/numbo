@@ -1,5 +1,0 @@
-{"type":"server-started","port":51528,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:51528/?key=99fe9e778ef6630af3ac04e1dda0279867f788cce2d29e1f456d99ab6d95b7a2","screen_dir":"/home/ben/github/bingo/.superpowers/brainstorm/42188-1793836023/content","state_dir":"/home/ben/github/bingo/.superpowers/brainstorm/42188-1793836023/state","idle_timeout_ms":14400000}
-{"type":"screen-added","file":"/home/ben/github/bingo/.superpowers/brainstorm/42188-1793836023/content/big-square.html"}
-{"type":"screen-added","file":"/home/ben/github/bingo/.superpowers/brainstorm/42188-1793836023/content/last5.html"}
-{"type":"screen-added","file":"/home/ben/github/bingo/.superpowers/brainstorm/42188-1793836023/content/center.html"}
-{"source":"user-event","type":"click","text":"C1\n    \n      C1 — Centered overlay with blur backdrop\n      \n        1\n        2\n        3\n        4\n        5\n        6\n        7\n        8\n        9\n        10\n        \n        \n          42\n          Winnie the Pooh\n        \n      \n      Controls in a bottom strip: Call next / Auto / Reset.","choice":"C1","id":null,"timestamp":1793836165746}

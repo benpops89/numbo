@@ -6,6 +6,7 @@ const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)
 const numberEl = $("#number") as HTMLDivElement;
 const phraseEl = $("#phrase") as HTMLDivElement;
 const currentEl = $("#current") as HTMLDivElement;
+let hideTimer: ReturnType<typeof setTimeout> | null = null;
 const remainingEl = $("#remaining") as HTMLSpanElement;
 const gridEl = $("#grid") as HTMLDivElement;
 const callBtn = $("#callBtn") as HTMLButtonElement;
@@ -83,10 +84,13 @@ function render(state: any) {
     currentNumber = state.current.number;
     currentEl.classList.remove("hidden");
     playNumber(state.current.number);
+    if (hideTimer) clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => currentEl.classList.add("hidden"), 2500);
   } else {
     numberEl.textContent = "--";
     phraseEl.textContent = "";
     currentNumber = null;
+    if (hideTimer) clearTimeout(hideTimer);
     currentEl.classList.add("hidden");
   }
   remainingEl.textContent = `${state.remaining} remaining`;
