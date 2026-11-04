@@ -24,15 +24,19 @@ for (let n = 1; n <= 90; n++) {
 }
 
 let currentNumber: number | null = null;
+let lastPlayed: number | null = null;
 
 function render(state: any) {
   if (state.current) {
     numberEl.textContent = String(state.current.number);
     phraseEl.textContent = state.current.phrase;
     currentNumber = state.current.number;
-    // play audio
-    const audio = new Audio(`/audio/${state.current.number}.wav`);
-    audio.play().catch(() => {});
+    // play audio once per new number
+    if (state.current.number !== lastPlayed) {
+      lastPlayed = state.current.number;
+      const audio = new Audio(`/audio/${state.current.number}.wav`);
+      audio.play().catch((e) => console.error("audio play failed", state.current.number, e));
+    }
   } else {
     numberEl.textContent = "--";
     phraseEl.textContent = "Press \"Call next\" to start";
@@ -52,9 +56,16 @@ function render(state: any) {
 }
 
 callBtn.addEventListener("click", async () => {
-  try { await Caller.callNext(); } catch (e) { console.error(e); }
+  try {
+    const c = await Caller.callNext();
+    if (c.number !== lastPlayed) {
+      lastPlayed = c.number;
+      new Audio(`/audio/${c.number}.wav`).play().catch((e) => console.error("audio play failed", c.number, e));
+    }
+  } catch (e) { console.error(e); }
 });
 resetBtn.addEventListener("click", async () => {
+  lastPlayed = null;
   await Caller.reset();
 });
 autoToggle.addEventListener("change", async () => {
