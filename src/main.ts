@@ -25,6 +25,22 @@ for (let n = 1; n <= 90; n++) {
 
 let currentNumber: number | null = null;
 let lastPlayed: number | null = null;
+let audioEl: HTMLAudioElement | null = null;
+function getAudio(): HTMLAudioElement {
+  if (!audioEl) {
+    audioEl = new Audio();
+    audioEl.preload = "auto";
+  }
+  return audioEl;
+}
+function playNumber(n: number) {
+  if (n === lastPlayed) return;
+  lastPlayed = n;
+  const a = getAudio();
+  a.src = `/audio/${n}.wav`;
+  const p = a.play();
+  if (p) p.catch((e) => console.error("audio play failed", n, e));
+}
 
 function render(state: any) {
   if (state.current) {
@@ -32,11 +48,7 @@ function render(state: any) {
     phraseEl.textContent = state.current.phrase;
     currentNumber = state.current.number;
     // play audio once per new number
-    if (state.current.number !== lastPlayed) {
-      lastPlayed = state.current.number;
-      const audio = new Audio(`/audio/${state.current.number}.wav`);
-      audio.play().catch((e) => console.error("audio play failed", state.current.number, e));
-    }
+    playNumber(state.current.number);
   } else {
     numberEl.textContent = "--";
     phraseEl.textContent = "Press \"Call next\" to start";
@@ -58,10 +70,7 @@ function render(state: any) {
 callBtn.addEventListener("click", async () => {
   try {
     const c = await Caller.callNext();
-    if (c.number !== lastPlayed) {
-      lastPlayed = c.number;
-      new Audio(`/audio/${c.number}.wav`).play().catch((e) => console.error("audio play failed", c.number, e));
-    }
+    playNumber(c.number);
   } catch (e) { console.error(e); }
 });
 resetBtn.addEventListener("click", async () => {
