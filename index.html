@@ -8,25 +8,17 @@
   </head>
   <body>
     <main>
-      <div class="layout">
-        <aside class="panel">
-          <div id="number">--</div>
-          <div id="phrase" class="muted">Press "Call next" to start</div>
-          <div id="remaining" class="muted"></div>
-          <div class="controls">
-            <button id="callBtn">Call next</button>
-            <button id="resetBtn" class="secondary">Reset</button>
-            <label class="auto">
-              <input type="checkbox" id="autoToggle" /> Auto
-            </label>
-            <label class="interval">
-              every
-              <input type="number" id="interval" min="1" max="60" value="5" />
-              s
-            </label>
-          </div>
-        </aside>
-        <section id="grid" aria-label="Called numbers"></section>
+      <section id="grid" aria-label="Called numbers"></section>
+      <div id="current" class="hidden">
+        <div id="number">--</div>
+        <div id="phrase"></div>
+      </div>
+      <div class="strip">
+        <span id="remaining" class="muted"></span>
+        <button id="callBtn">Call next</button>
+        <label class="auto"><input type="checkbox" id="autoToggle" /> Auto</label>
+        <label class="interval">every <input type="number" id="interval" min="1" max="60" value="5" /> s</label>
+        <button id="resetBtn" class="secondary">Reset</button>
       </div>
     </main>
     <script type="module" src="./src/main.ts"></script>

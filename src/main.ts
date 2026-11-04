@@ -5,6 +5,7 @@ const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)
 
 const numberEl = $("#number") as HTMLDivElement;
 const phraseEl = $("#phrase") as HTMLDivElement;
+const currentEl = $("#current") as HTMLDivElement;
 const remainingEl = $("#remaining") as HTMLSpanElement;
 const gridEl = $("#grid") as HTMLDivElement;
 const callBtn = $("#callBtn") as HTMLButtonElement;
@@ -80,12 +81,13 @@ function render(state: any) {
     numberEl.textContent = String(state.current.number);
     phraseEl.textContent = state.current.phrase;
     currentNumber = state.current.number;
-    // play audio once per new number
+    currentEl.classList.remove("hidden");
     playNumber(state.current.number);
   } else {
     numberEl.textContent = "--";
-    phraseEl.textContent = "Press \"Call next\" to start";
+    phraseEl.textContent = "";
     currentNumber = null;
+    currentEl.classList.add("hidden");
   }
   remainingEl.textContent = `${state.remaining} remaining`;
   // grid
