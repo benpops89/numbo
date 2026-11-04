@@ -25,21 +25,54 @@ for (let n = 1; n <= 90; n++) {
 
 let currentNumber: number | null = null;
 let lastPlayed: number | null = null;
-let audioEl: HTMLAudioElement | null = null;
-function getAudio(): HTMLAudioElement {
-  if (!audioEl) {
-    audioEl = new Audio();
-    audioEl.preload = "auto";
-  }
-  return audioEl;
+let audioCtx: AudioContext | null = null;
+const audioBuffers = new Map<number, AudioBuffer>();
+let audioUnlocked = false;
+
+function getCtx(): AudioContext {
+  if (!audioCtx) audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  return audioCtx;
 }
-function playNumber(n: number) {
+
+async function loadBuffer(n: number): Promise<AudioBuffer | null> {
+  if (audioBuffers.has(n)) return audioBuffers.get(n)!;
+  try {
+    const res = await fetch(`/audio/${n}.wav`);
+    const arr = await res.arrayBuffer();
+    const buf = await getCtx().decodeAudioData(arr);
+    audioBuffers.set(n, buf);
+    return buf;
+  } catch (e) {
+    console.error("load audio failed", n, e);
+    return null;
+  }
+}
+
+function unlockAudio() {
+  if (audioUnlocked) return;
+  const ctx = getCtx();
+  if (ctx.state === "suspended") ctx.resume();
+  // play a silent buffer to unlock
+  const buf = ctx.createBuffer(1, 1, 22050);
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.connect(ctx.destination);
+  src.start(0);
+  audioUnlocked = true;
+}
+
+async function playNumber(n: number) {
   if (n === lastPlayed) return;
   lastPlayed = n;
-  const a = getAudio();
-  a.src = `/audio/${n}.wav`;
-  const p = a.play();
-  if (p) p.catch((e) => console.error("audio play failed", n, e));
+  unlockAudio();
+  const ctx = getCtx();
+  if (ctx.state === "suspended") await ctx.resume();
+  const buf = await loadBuffer(n);
+  if (!buf) return;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.connect(ctx.destination);
+  src.start(0);
 }
 
 function render(state: any) {
@@ -89,6 +122,7 @@ intervalInput.addEventListener("change", async () => {
   }
 });
 
+window.addEventListener("pointerdown", () => unlockAudio(), { once: false });
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space" && !(e.target instanceof HTMLInputElement)) {
     e.preventDefault();
