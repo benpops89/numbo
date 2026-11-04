@@ -77,7 +77,7 @@ main {
   backdrop-filter: blur(6px);
   color: #fff;
   border-radius: 16px;
-  padding: 36px 64px;
+  padding: 48px 80px;
   text-align: center;
   box-shadow: 0 8px 32px rgba(0,0,0,0.35);
   z-index: 10;
@@ -86,10 +86,10 @@ main {
 }
 #current.hidden { opacity: 0; }
 #number {
-  font-size: 160px;
+  font-size: 220px;
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -4px;
+  letter-spacing: -6px;
 }
 #phrase {
   font-size: 24px;
