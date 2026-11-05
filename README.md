@@ -31,7 +31,6 @@ the game hands-free. Players mark physical cards.
   away after a couple of seconds
 - 📊 **Called grid** — all 90 numbers at a glance, highlighted as they're
   called
-- 🖥️ **Tray icon** — reset or quit without leaving your seat
 
 ## 🎮 How it works
 
@@ -84,7 +83,6 @@ Things on the horizon for Numbo:
 - 📈 **Game stats** — calls per game, time to full house, history of past
   games
 - 🔊 **Voice options** — alternative voices or languages for the calls
-- 🖥️ **macOS/Windows icon polish** — per-platform tray template images
 
 Contributions welcome — see the build steps above to get a dev environment
 up and running.

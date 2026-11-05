@@ -16,7 +16,6 @@ func main() {
 	app.WhenReady(func() {
 		// No menu bar: the app is driven by its own UI.
 		app.SetMenu(nil)
-		setupTray(caller)
 		mygo.NewWindow(mygo.WindowOptions{
 			Title:           "Numbo",
 			Width:           980,
