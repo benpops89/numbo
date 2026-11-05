@@ -14,8 +14,8 @@ export default defineConfig({
   out: "build",
   linux: {
     command: "numbo",
-    maintainer: "Ben <ben@example.com>",
-    comment: "Numbo – a playful 90-ball bingo caller that speaks the numbers",  
+    maintainer: "Ben Poppy <me@benpoppy.dev>",
+    comment: "Numbo – a playful 90-ball bingo caller that speaks the numbers",
     categories: ["Game", "Utility"],
   },
 });
