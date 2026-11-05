@@ -8,17 +8,33 @@
   </head>
   <body>
     <main>
+      <button id="settingsBtn" title="Settings">⚙</button>
       <section id="grid" aria-label="Called numbers"></section>
       <div id="current" class="hidden">
         <div id="number">--</div>
         <div id="phrase"></div>
       </div>
       <div class="strip">
-        <span id="remaining" class="muted"></span>
-        <button id="callBtn">Call next</button>
-        <label class="auto"><input type="checkbox" id="autoToggle" /> Auto</label>
-        <label class="interval">every <input type="number" id="interval" min="1" max="60" value="5" /> s</label>
-        <button id="resetBtn" class="secondary">Reset</button>
+        <button id="callBtn" class="primary">Call next</button>
+      </div>
+
+      <div id="settingsModal" class="modal hidden">
+        <div class="modal-card">
+          <h2>Settings</h2>
+          <div class="row">
+            <label><input type="checkbox" id="autoToggle" /> Auto-call</label>
+          </div>
+          <div class="row">
+            <label>Interval
+              <input type="number" id="interval" min="1" max="60" value="5" /> s
+            </label>
+          </div>
+          <div class="row">
+            <span id="remaining" class="muted"></span>
+          </div>
+          <button id="resetBtn" class="secondary">Reset game</button>
+          <button id="closeSettings" class="ghost">Close</button>
+        </div>
       </div>
     </main>
     <script type="module" src="./src/main.ts"></script>

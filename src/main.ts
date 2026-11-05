@@ -13,6 +13,9 @@ const callBtn = $("#callBtn") as HTMLButtonElement;
 const autoToggle = $("#autoToggle") as HTMLInputElement;
 const intervalInput = $("#interval") as HTMLInputElement;
 const resetBtn = $("#resetBtn") as HTMLButtonElement;
+const settingsBtn = $("#settingsBtn") as HTMLButtonElement;
+const settingsModal = $("#settingsModal") as HTMLDivElement;
+const closeSettings = $("#closeSettings") as HTMLButtonElement;
 
 // Build grid 1..90
 const cells: HTMLDivElement[] = [];
@@ -83,6 +86,9 @@ function render(state: any) {
     phraseEl.textContent = state.current.phrase;
     currentNumber = state.current.number;
     currentEl.classList.remove("hidden");
+    currentEl.classList.remove("pop");
+    void currentEl.offsetWidth; // restart animation
+    currentEl.classList.add("pop");
     playNumber(state.current.number);
     if (hideTimer) clearTimeout(hideTimer);
     hideTimer = setTimeout(() => currentEl.classList.add("hidden"), 2500);
@@ -134,6 +140,15 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
     callBtn.click();
   }
+  if (e.code === "Escape") {
+    settingsModal.classList.add("hidden");
+  }
+});
+
+settingsBtn.addEventListener("click", () => settingsModal.classList.remove("hidden"));
+closeSettings.addEventListener("click", () => settingsModal.classList.add("hidden"));
+settingsModal.addEventListener("click", (e) => {
+  if (e.target === settingsModal) settingsModal.classList.add("hidden");
 });
 
 events.callerChanged.on((state) => render(state));
