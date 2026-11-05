@@ -27,6 +27,7 @@ func main() {
 			{Role: mygo.RoleViewMenu},
 			{Role: mygo.RoleWindowMenu},
 		}))
+		setupTray(caller)
 		mygo.NewWindow(mygo.WindowOptions{
 			Title:           "Bingo Caller",
 			Width:           980,
