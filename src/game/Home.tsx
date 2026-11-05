@@ -1,13 +1,19 @@
+import { useState } from "preact/hooks";
 import { mode, interval } from "./state";
 
 export function Home(_props: { path?: string }) {
-  const step = (d: number) => {
-    interval.value = Math.min(60, Math.max(1, interval.value + d));
-  };
+  const [showInterval, setShowInterval] = useState(false);
+
   const start = (m: "manual" | "auto") => {
     mode.value = m;
     location.hash = "#/game";
   };
+
+  const startAuto = () => {
+    setShowInterval(false);
+    start("auto");
+  };
+
   return (
     <div id="home" class="screen">
       <h1 class="brand">BINGO CALLER</h1>
@@ -16,16 +22,29 @@ export function Home(_props: { path?: string }) {
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
           <span class="tile-title">Manual</span>
         </div>
-        <div class="tile" data-mode="auto" role="button" tabIndex={0} onClick={() => start("auto")}>
+        <div class="tile" data-mode="auto" role="button" tabIndex={0} onClick={() => setShowInterval(true)}>
           <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
           <span class="tile-title">Auto</span>
-          <span class="stepper">
-            <span class="stepbtn" onClick={(e) => { e.stopPropagation(); step(-1); }}>−</span>
-            <span class="stepval">{interval.value}s</span>
-            <span class="stepbtn" onClick={(e) => { e.stopPropagation(); step(1); }}>+</span>
-          </span>
         </div>
       </div>
+
+      {showInterval ? (
+        <div class="modal-backdrop" onClick={(e) => { if (e.target === e.currentTarget) setShowInterval(false); }}>
+          <div class="modal-card small">
+            <div class="modal-label">Call a number every</div>
+            <input
+              type="range"
+              min={1}
+              max={30}
+              value={interval.value}
+              onInput={(e) => { interval.value = parseInt((e.target as HTMLInputElement).value, 10); }}
+              style={{ width: "100%", accentColor: "var(--accent)" }}
+            />
+            <div class="modal-value">{interval.value}s</div>
+            <button class="modal-start" onClick={startAuto}>Start</button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
