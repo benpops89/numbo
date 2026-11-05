@@ -42,12 +42,13 @@ over a compact grid of the 90 balls, gold as they're called.
 
 ## 🛠️ Building from source
 
-Requirements: **Go 1.27+**, **Bun**, **ffmpeg** (with the flite filter) and
-**WebKitGTK**.
+Requirements: **Go 1.27+**, **Bun** and
+[Piper](https://github.com/rhasspy/piper) TTS (installed with
+`pip install piper-tts`, voices downloaded on first run of the audio script).
 
 ```sh
 # 1. generate the call audio (90 wav files)
-bash scripts/gen-audio.sh
+python3 scripts/gen-audio.py
 
 # 2. install frontend deps
 bun install
@@ -94,7 +95,7 @@ up and running.
   the desktop app framework this is built on
 - Bingo call phrases from the traditional UK 90-ball canon
 - Voice audio generated with
-  [Flite](http://www.festvox.org/flite/) via ffmpeg
+  [Piper](https://github.com/rhasspy/piper) neural TTS
 
 ---
 
