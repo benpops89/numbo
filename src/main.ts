@@ -3,33 +3,36 @@ import "./style.css";
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
 
+// Screens
+const homeEl = $("#home") as HTMLDivElement;
+const gameEl = $("#game") as HTMLDivElement;
+
+// Home
+const manualTile = $("#manualTile") as HTMLButtonElement;
+const autoTile = $("#autoTile") as HTMLButtonElement;
+const intervalDown = $("#intervalDown") as HTMLButtonElement;
+const intervalUp = $("#intervalUp") as HTMLButtonElement;
+const intervalVal = $("#intervalVal") as HTMLSpanElement;
+
+// Game
 const numberEl = $("#number") as HTMLDivElement;
 const phraseEl = $("#phrase") as HTMLDivElement;
 const currentEl = $("#current") as HTMLDivElement;
-let hideTimer: ReturnType<typeof setTimeout> | null = null;
-const remainingEl = $("#remaining") as HTMLSpanElement;
 const gridEl = $("#grid") as HTMLDivElement;
 const callBtn = $("#callBtn") as HTMLButtonElement;
-const autoToggle = $("#autoToggle") as HTMLInputElement;
-const intervalInput = $("#interval") as HTMLInputElement;
+const playPauseBtn = $("#playPauseBtn") as HTMLButtonElement;
+const playIcon = $("#playIcon");
+const pauseIcon = $("#pauseIcon");
 const resetBtn = $("#resetBtn") as HTMLButtonElement;
-const settingsBtn = $("#settingsBtn") as HTMLButtonElement;
-const settingsModal = $("#settingsModal") as HTMLDivElement;
-const closeSettings = $("#closeSettings") as HTMLButtonElement;
+const homeBtn = $("#homeBtn") as HTMLButtonElement;
 
-// Build grid 1..90
-const cells: HTMLDivElement[] = [];
-for (let n = 1; n <= 90; n++) {
-  const c = document.createElement("div");
-  c.className = "cell";
-  c.textContent = String(n);
-  c.dataset.n = String(n);
-  cells.push(c);
-  gridEl.appendChild(c);
-}
-
-let currentNumber: number | null = null;
+let mode: "manual" | "auto" = "auto";
+let interval = 5;
+let hideTimer: ReturnType<typeof setTimeout> | null = null;
 let lastPlayed: number | null = null;
+let autoRunning = false;
+
+// ---- Audio (Web Audio API) ----
 let audioCtx: AudioContext | null = null;
 const audioBuffers = new Map<number, AudioBuffer>();
 let audioUnlocked = false;
@@ -57,7 +60,6 @@ function unlockAudio() {
   if (audioUnlocked) return;
   const ctx = getCtx();
   if (ctx.state === "suspended") ctx.resume();
-  // play a silent buffer to unlock
   const buf = ctx.createBuffer(1, 1, 22050);
   const src = ctx.createBufferSource();
   src.buffer = buf;
@@ -80,11 +82,30 @@ async function playNumber(n: number) {
   src.start(0);
 }
 
+// ---- Grid ----
+const cells: HTMLDivElement[] = [];
+for (let n = 1; n <= 90; n++) {
+  const c = document.createElement("div");
+  c.className = "cell";
+  c.textContent = String(n);
+  cells.push(c);
+  gridEl.appendChild(c);
+}
+
+// ---- Rendering ----
 function render(state: any) {
+  const called = new Set<number>(state.called);
+  cells.forEach((c, i) => {
+    const n = i + 1;
+    c.classList.toggle("called", called.has(n));
+    c.classList.toggle("current", state.current != null && n === state.current.number && !(state as any)._done);
+  });
+  if (state.current && !autoRunning) {
+    // update card on manual change
+  }
   if (state.current) {
     numberEl.textContent = String(state.current.number);
     phraseEl.textContent = state.current.phrase;
-    currentNumber = state.current.number;
     currentEl.classList.remove("hidden");
     currentEl.classList.remove("pop");
     void currentEl.offsetWidth; // restart animation
@@ -95,63 +116,103 @@ function render(state: any) {
   } else {
     numberEl.textContent = "--";
     phraseEl.textContent = "";
-    currentNumber = null;
-    if (hideTimer) clearTimeout(hideTimer);
     currentEl.classList.add("hidden");
   }
-  remainingEl.textContent = `${state.remaining} remaining`;
-  // grid
-  const called = new Set<number>(state.called);
-  cells.forEach((c, i) => {
-    const n = i + 1;
-    c.classList.toggle("called", called.has(n));
-    c.classList.toggle("current", n === currentNumber);
-  });
-  autoToggle.checked = state.auto;
-  if (state.intervalMs) intervalInput.value = String(Math.round(state.intervalMs / 1000));
-  callBtn.disabled = state.remaining === 0;
 }
 
-callBtn.addEventListener("click", async () => {
-  try {
-    const c = await Caller.callNext();
-    playNumber(c.number);
-  } catch (e) { console.error(e); }
+// ---- Screens ----
+function showHome() {
+  gameEl.classList.add("hidden");
+  homeEl.classList.remove("hidden");
+  stopAuto();
+}
+
+function showGame() {
+  homeEl.classList.add("hidden");
+  gameEl.classList.remove("hidden");
+  playPauseBtn.classList.toggle("hidden", mode === "manual");
+  unlockAudio();
+  return Promise.resolve();
+}
+
+async function startAuto() {
+  autoRunning = true;
+  pauseIcon.classList.remove("hidden");
+  playIcon.classList.add("hidden");
+  await Caller.setAuto(true, interval * 1000);
+}
+
+function stopAuto() {
+  if (!autoRunning) return;
+  autoRunning = false;
+  playIcon.classList.remove("hidden");
+  pauseIcon.classList.add("hidden");
+  Caller.setAuto(false, interval * 1000);
+}
+
+// ---- Home interactions ----
+manualTile.addEventListener("click", () => {
+  mode = "manual";
+  showGame();
 });
+
+autoTile.addEventListener("click", (e) => {
+  if ((e.target as HTMLElement).closest(".stepper")) return; // stepper clicks don't start
+  mode = "auto";
+  showGame().then(startAuto);
+});
+
+intervalDown.addEventListener("click", (e) => {
+  e.stopPropagation();
+  interval = Math.max(1, interval - 1);
+  intervalVal.textContent = `${interval}s`;
+});
+intervalUp.addEventListener("click", (e) => {
+  e.stopPropagation();
+  interval = Math.min(60, interval + 1);
+  intervalVal.textContent = `${interval}s`;
+});
+
+// ---- Game interactions ----
+callBtn.addEventListener("click", async () => {
+  unlockAudio();
+  const c = await Caller.callNext();
+  playNumber(c.number);
+});
+
+playPauseBtn.addEventListener("click", () => {
+  if (autoRunning) stopAuto();
+  else startAuto();
+});
+
 resetBtn.addEventListener("click", async () => {
   lastPlayed = null;
   await Caller.reset();
-});
-autoToggle.addEventListener("change", async () => {
-  const enabled = autoToggle.checked;
-  const sec = Math.max(1, parseInt(intervalInput.value || "5", 10));
-  await Caller.setAuto(enabled, sec * 1000);
-});
-intervalInput.addEventListener("change", async () => {
-  if (autoToggle.checked) {
-    const sec = Math.max(1, parseInt(intervalInput.value || "5", 10));
-    await Caller.setAuto(true, sec * 1000);
-  }
+  if (mode === "auto" && autoRunning) await startAuto();
 });
 
-window.addEventListener("pointerdown", () => unlockAudio(), { once: false });
+homeBtn.addEventListener("click", async () => {
+  lastPlayed = null;
+  await Caller.reset();
+  showHome();
+});
+
 window.addEventListener("keydown", (e) => {
-  if (e.code === "Space" && !(e.target instanceof HTMLInputElement)) {
+  if (e.code === "Space" && !(e.target instanceof HTMLInputElement) && gameEl.classList.contains("hidden") === false) {
     e.preventDefault();
-    callBtn.click();
-  }
-  if (e.code === "Escape") {
-    settingsModal.classList.add("hidden");
+    if (mode === "manual") callBtn.click();
   }
 });
 
-settingsBtn.addEventListener("click", () => settingsModal.classList.remove("hidden"));
-closeSettings.addEventListener("click", () => settingsModal.classList.add("hidden"));
-settingsModal.addEventListener("click", (e) => {
-  if (e.target === settingsModal) settingsModal.classList.add("hidden");
+events.callerChanged.on((state) => {
+  // sync play/pause icon from state.auto if backend tells
+  if (typeof state.auto === "boolean" && mode === "auto") {
+    autoRunning = state.auto;
+    pauseIcon.classList.toggle("hidden", !state.auto);
+    playIcon.classList.toggle("hidden", state.auto);
+  }
+  render(state);
 });
 
-events.callerChanged.on((state) => render(state));
-
-// initial
-Caller.state().then(render).catch(console.error);
+// initial state
+Caller.state().then((state) => render(state)).catch(console.error);

@@ -7,36 +7,52 @@
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body>
-    <main>
-      <button id="settingsBtn" title="Settings">⚙</button>
+
+    <!-- Home screen -->
+    <div id="home" class="screen">
+      <h1 class="brand">BINGO CALLER</h1>
+      <div class="tiles">
+        <button id="manualTile" class="tile" data-mode="manual">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span class="tile-title">Manual</span>
+          <span class="tile-sub">Press for each call</span>
+        </button>
+        <button id="autoTile" class="tile selected" data-mode="auto">
+          <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          <span class="tile-title">Auto</span>
+          <span class="stepper">
+            <button id="intervalDown" class="stepbtn">−</button>
+            <span id="intervalVal" class="stepval">5s</span>
+            <button id="intervalUp" class="stepbtn">+</button>
+          </span>
+          <span class="tile-sub">between calls</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Game screen -->
+    <div id="game" class="screen hidden">
       <section id="grid" aria-label="Called numbers"></section>
       <div id="current" class="hidden">
         <div id="number">--</div>
         <div id="phrase"></div>
       </div>
-      <div class="strip">
-        <button id="callBtn" class="primary">Call next</button>
+      <div class="media">
+        <button id="homeBtn" class="iconbtn" title="Home">
+          <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3z"/></svg>
+        </button>
+        <button id="playPauseBtn" class="iconbtn hidden" title="Pause">
+          <svg id="pauseIcon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          <svg id="playIcon" viewBox="0 0 24 24" class="hidden"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button id="callBtn" class="iconbtn big" title="Call next">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button id="resetBtn" class="iconbtn" title="Reset">
+          <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7a5 5 0 11-5 5H5a7 7 0 107-7z"/></svg>
+        </button>
       </div>
-
-      <div id="settingsModal" class="modal hidden">
-        <div class="modal-card">
-          <h2>Settings</h2>
-          <div class="row">
-            <label><input type="checkbox" id="autoToggle" /> Auto-call</label>
-          </div>
-          <div class="row">
-            <label>Interval
-              <input type="number" id="interval" min="1" max="60" value="5" /> s
-            </label>
-          </div>
-          <div class="row">
-            <span id="remaining" class="muted"></span>
-          </div>
-          <button id="resetBtn" class="secondary">Reset game</button>
-          <button id="closeSettings" class="ghost">Close</button>
-        </div>
-      </div>
-    </main>
+    </div>
     <script type="module" src="./src/main.ts"></script>
   </body>
 </html>

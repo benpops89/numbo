@@ -1,0 +1,60 @@
+<h2>H2 refined — auto tile with interval stepper</h2>
+<p class="subtitle">Two big tiles; auto tile has - / + interval controls. Click tile starts game.</p>
+
+<div class="options">
+  <div class="option" data-choice="H2a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Stepper inside auto tile</h3>
+      <div class="mock" style="background:linear-gradient(135deg,#16213e,#1a1a2e);color:#fff;border-radius:10px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:16px;min-height:300px;justify-content:center;">
+        <div style="font-size:28px;font-weight:800;letter-spacing:2px;">BINGO CALLER</div>
+        <div style="display:flex;gap:16px;">
+          <div style="background:rgba(255,255,255,.06);border:2px solid transparent;border-radius:18px;padding:24px;width:180px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <svg style="width:44px;height:44px;fill:#e94560;" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <div style="font-weight:800;font-size:17px;">Manual</div>
+            <div style="font-size:12px;opacity:.6;">Press for each call</div>
+          </div>
+          <div style="background:rgba(233,69,96,.12);border:2px solid #e94560;border-radius:18px;padding:24px;width:180px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <svg style="width:44px;height:44px;fill:#ffd166;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <div style="font-weight:800;font-size:17px;">Auto</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.15);display:inline-flex;align-items:center;justify-content:center;font-weight:800;">−</span>
+              <span style="font-size:20px;font-weight:800;min-width:52px;">5s</span>
+              <span style="width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.15);display:inline-flex;align-items:center;justify-content:center;font-weight:800;">+</span>
+            </div>
+            <div style="font-size:12px;opacity:.6;">between calls</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="H2b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Interval selector below tiles</h3>
+      <div class="mock" style="background:linear-gradient(135deg,#16213e,#1a1a2e);color:#fff;border-radius:10px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:16px;min-height:300px;justify-content:center;">
+        <div style="font-size:28px;font-weight:800;letter-spacing:2px;">BINGO CALLER</div>
+        <div style="display:flex;gap:16px;">
+          <div style="background:rgba(255,255,255,.06);border:2px solid transparent;border-radius:18px;padding:24px;width:180px;text-align:center;cursor:pointer;">
+            <svg style="width:44px;height:44px;fill:#e94560;" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <div style="font-weight:800;font-size:17px;margin-top:10px;">Manual</div>
+          </div>
+          <div style="background:rgba(233,69,96,.12);border:2px solid #e94560;border-radius:18px;padding:24px;width:180px;text-align:center;cursor:pointer;">
+            <svg style="width:44px;height:44px;fill:#ffd166;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <div style="font-weight:800;font-size:17px;margin-top:10px;">Auto</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px;">
+          <span style="opacity:.6;">Call every</span>
+          <span style="display:flex;gap:6px;">
+            <span style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.08);font-weight:700;">3s</span>
+            <span style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.08);font-weight:700;">5s</span>
+            <span style="padding:8px 12px;border-radius:8px;background:#e94560;font-weight:700;">10s</span>
+            <span style="padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.08);font-weight:700;">15s</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
