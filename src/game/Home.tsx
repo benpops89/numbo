@@ -32,6 +32,7 @@ export function Home(_props: { path?: string }) {
 
   return (
     <div id="home" class="screen">
+      <img src="./logo.png" class="brand-logo" alt="" />
       <h1 class="brand">BINGO CALLER</h1>
       <div class="tiles">
         <div class="tile" data-mode="manual" role="button" tabIndex={0} onClick={() => start("manual")} onKeyDown={onKey("manual")}>
