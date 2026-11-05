@@ -1,2 +1,27 @@
 [tools]
 go = "1.27.3"
+
+[tasks.audio]
+description = "Generate the 90 call audio files with Piper TTS"
+run = "python3 scripts/gen-audio.py"
+dir = "{{config_root}}"
+
+[tasks.dev]
+description = "Run the app in development with live reload"
+run = "bun run dev"
+dir = "{{config_root}}"
+
+[tasks.build]
+description = "Package the app for Linux"
+run = "bun run build"
+dir = "{{config_root}}"
+
+[tasks.test]
+description = "Run Go tests"
+run = "go test ./..."
+dir = "{{config_root}}"
+
+[tasks.typecheck]
+description = "Typecheck the frontend"
+run = "bun run typecheck"
+dir = "{{config_root}}"
