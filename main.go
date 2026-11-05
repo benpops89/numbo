@@ -14,19 +14,8 @@ func main() {
 	mygo.Bind(caller)
 
 	app.WhenReady(func() {
-		app.SetMenu(mygo.NewMenu([]*mygo.MenuItem{
-			{Role: mygo.RoleAppMenu},
-			{Label: "Game", Submenu: []*mygo.MenuItem{
-				{Label: "Reset", Accelerator: "CmdOrCtrl+R", Click: func(*mygo.MenuItem, *mygo.Window) {
-					go caller.Reset()
-				}},
-				mygo.Separator(),
-				{Role: mygo.RoleClose},
-			}},
-			{Role: mygo.RoleEditMenu},
-			{Role: mygo.RoleViewMenu},
-			{Role: mygo.RoleWindowMenu},
-		}))
+		// No menu bar: the app is driven by its own UI.
+		app.SetMenu(nil)
 		setupTray(caller)
 		mygo.NewWindow(mygo.WindowOptions{
 			Title:           "Numbo",
