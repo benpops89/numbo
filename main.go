@@ -8,7 +8,7 @@ import (
 
 func main() {
 	app := mygo.App
-	app.SetName("Bingo Caller")
+	app.SetName("Numbo")
 
 	caller := NewCaller()
 	mygo.Bind(caller)
@@ -29,7 +29,7 @@ func main() {
 		}))
 		setupTray(caller)
 		mygo.NewWindow(mygo.WindowOptions{
-			Title:           "Bingo Caller",
+			Title:           "Numbo",
 			Width:           980,
 			Height:          720,
 			MinWidth:        720,

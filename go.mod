@@ -1,4 +1,4 @@
-module bingo
+module numbo
 
 go 1.27.3
 

@@ -15,7 +15,7 @@ func setupTray(caller *Caller) {
 	if _, err := mygo.NewTray(mygo.TrayOptions{
 		ID:      "main",
 		Icon:    trayIconPNG,
-		ToolTip: "Bingo Caller",
+		ToolTip: "Numbo",
 		Menu: mygo.NewMenu([]*mygo.MenuItem{
 			{Label: "Reset Game", Click: func(*mygo.MenuItem, *mygo.Window) { go caller.Reset() }},
 			mygo.Separator(),

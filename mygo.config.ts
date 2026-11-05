@@ -1,8 +1,8 @@
 import { defineConfig } from "mygo-cli";
 
 export default defineConfig({
-  name: "bingo",
-  identifier: "com.example.bingo",
+  name: "numbo",
+  identifier: "com.example.numbo",
   version: "0.2.0",
   // `mygo dev` runs devCommand and loads devUrl; `mygo build` runs
   // buildCommand and embeds frontendDist into the app.
@@ -13,8 +13,9 @@ export default defineConfig({
   bindings: "src/mygo.ts",
   out: "build",
   linux: {
+    command: "numbo",
     maintainer: "Ben <ben@example.com>",
-    comment: "90-ball bingo caller that speaks the numbers and their calls",
+    comment: "Numbo – a playful 90-ball bingo caller that speaks the numbers",  
     categories: ["Game", "Utility"],
   },
 });
