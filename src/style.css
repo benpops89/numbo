@@ -110,7 +110,11 @@ body {
   background: var(--accent);
   color: #fff;
   border-radius: 20px;
-  padding: 44px 80px;
+  width: 380px;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   box-shadow: 0 0 60px rgba(233, 69, 96, 0.55), 0 12px 40px rgba(0, 0, 0, 0.4);
   z-index: 10;
@@ -125,7 +129,6 @@ body {
   line-height: 1;
   letter-spacing: -6px;
 }
-#phrase { font-size: 24px; margin-top: 8px; opacity: 0.95; font-weight: 600; }
 @keyframes pop {
   0% { transform: translate(-50%, -50%) scale(0.4); }
   100% { transform: translate(-50%, -50%) scale(1); }

@@ -15,7 +15,6 @@ export function Home(_props: { path?: string }) {
         <div class="tile" data-mode="manual" role="button" tabIndex={0} onClick={() => start("manual")}>
           <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
           <span class="tile-title">Manual</span>
-          <span class="tile-sub">Press for each call</span>
         </div>
         <div class="tile" data-mode="auto" role="button" tabIndex={0} onClick={() => start("auto")}>
           <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
@@ -25,7 +24,6 @@ export function Home(_props: { path?: string }) {
             <span class="stepval">{interval.value}s</span>
             <span class="stepbtn" onClick={(e) => { e.stopPropagation(); step(1); }}>+</span>
           </span>
-          <span class="tile-sub">between calls</span>
         </div>
       </div>
     </div>
