@@ -199,3 +199,44 @@ svg.hidden { display: none; }
   cursor: pointer;
 }
 .modal-start:hover { filter: brightness(1.12); }
+
+/* ---- Final polish ---- */
+.iconbtn.big {
+  background: var(--accent);
+  box-shadow: 0 0 24px rgba(233, 69, 96, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.iconbtn.big:hover { filter: brightness(1.12); }
+.iconbtn.big:disabled { box-shadow: none; }
+.iconbtn:focus-visible,
+.tile:focus-visible,
+.modal-start:focus-visible {
+  outline: 2px solid var(--called);
+  outline-offset: 2px;
+}
+.title-info {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--glass);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+.tile:hover { transform: translateY(-3px); }
+.tile:active { transform: translateY(-1px); }
+.end-badge {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--called);
+  color: #1a1a2e;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 6px 14px;
+  z-index: 15;
+}
+span.stepbtn, span.stepval { user-select: none; }

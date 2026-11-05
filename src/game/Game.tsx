@@ -70,6 +70,8 @@ export function Game(_props: { path?: string }) {
       <div id="current" class={showCard ? "pop" : "hidden"}>
         <div id="number">{current ? current.number : "--"}</div>
       </div>
+      <span class="title-info">{state ? state.remaining : 90} remaining</span>
+      {exhausted ? <span class="end-badge">Game complete</span> : null}
       <div class="media">
         <button class="iconbtn" title="Home" onClick={() => void goHome()}>
           <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3z" /></svg>
