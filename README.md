@@ -69,6 +69,25 @@ sudo dpkg -i build/linux-amd64/numbo_*_amd64.deb
 
 Then launch **Numbo** from your app launcher, or run `numbo` in a terminal.
 
+## 🚧 Roadmap
+
+Things on the horizon for Numbo:
+
+- 🔄 **CI/CD for all platforms** — GitHub Actions workflow building signed
+  installers for macOS (.dmg), Windows (.exe installer) and Linux (.deb) on
+  every release tag, with auto-update feeds wired up (MyGo ships signed
+  auto-updates out of the box)
+- 🌐 **Cross-platform testing** — GUI e2e runs on macOS and Windows runners,
+  not just Linux
+- 💾 **Remember the last interval** — start auto mode where you left off
+- 📈 **Game stats** — calls per game, time to full house, history of past
+  games
+- 🔊 **Voice options** — alternative voices or languages for the calls
+- 🖥️ **macOS/Windows icon polish** — per-platform tray template images
+
+Contributions welcome — see the build steps above to get a dev environment
+up and running.
+
 ## 🙏 Credits
 
 - [MyGo](https://mygo.egoist.dev/) by [@egoist](https://github.com/egoist) —
