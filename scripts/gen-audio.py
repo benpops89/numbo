@@ -19,7 +19,7 @@ for line in lines:
         tf.write(text)
     out = f"{OUTDIR}/{num.strip()}.wav"
     subprocess.run(
-        ["piper", "-m", VOICE, "-f", out, "-c", "1", "-r", "22050", "--", "-"],
+        ["piper", "-m", VOICE, "-f", out],
         stdin=open(tmp), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True,
     )
     print(f"generated {out}")
